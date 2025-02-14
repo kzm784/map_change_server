@@ -18,12 +18,10 @@ class MapChangeServer : public rclcpp::Node
         explicit MapChangeServer(const rclcpp::NodeOptions & options);
 
     private:
-        void Update(const example_interfaces::msg::Empty::SharedPtr msg);
         void Callback(const std::shared_ptr<waypoint_function_msgs::srv::Command::Request> request,
                         std::shared_ptr<waypoint_function_msgs::srv::Command::Response> response);
         void ServerApply();
     
-        rclcpp::Subscription<example_interfaces::msg::Empty>::SharedPtr update_sub_;
         rclcpp::Client<waypoint_function_msgs::srv::Command>::SharedPtr apply_client_;
         rclcpp::Service<waypoint_function_msgs::srv::Command>::SharedPtr server_;
         rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr pointcloud_pub_;

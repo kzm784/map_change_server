@@ -8,10 +8,6 @@ MapChangeServer::MapChangeServer(const rclcpp::NodeOptions &options) : Node("map
     pointcloud_pub_ = create_publisher<sensor_msgs::msg::PointCloud2>(
         "map",
         rclcpp::QoS(rclcpp::KeepLast(1)).transient_local().reliable());
-
-    // Subscriber to update when waypoint updated
-    update_sub_ = create_subscription<example_interfaces::msg::Empty>("server_update", 1,
-        bind(&MapChangeServer::Update, this, std::placeholders::_1));
     
     // Create Server
     server_ = create_service<waypoint_function_msgs::srv::Command>(
@@ -23,12 +19,6 @@ MapChangeServer::MapChangeServer(const rclcpp::NodeOptions &options) : Node("map
     apply_client_ = create_client<waypoint_function_msgs::srv::Command>("server_apply");
     // Apply Tihs Server to Host Server to create connection
     ServerApply();
-}
-
-void MapChangeServer::Update(const example_interfaces::msg::Empty::SharedPtr msg)
-{
-    RCLCPP_INFO(get_logger(), "Map Change Server Update.");
-    /* write upate code when waypoint updated */
 }
 
 void MapChangeServer::Callback(const std::shared_ptr<waypoint_function_msgs::srv::Command::Request> request, std::shared_ptr<waypoint_function_msgs::srv::Command::Response> response)
